@@ -7,7 +7,7 @@ def linier_function(x: float, x1: float, y1: float, x2: float, y2: float) -> flo
     '''
     return y2 + ((y1 - y2)*(x - x2))/(x1 - x2)
 
-def fuzzify(data: Optional[int | float], points: list, curve: str) -> float:
+def fuzzify(data, points: list, curve: str) -> float:
     if curve == 'ascending':
         if data <= points[0]:
             return 0.0
@@ -18,7 +18,7 @@ def fuzzify(data: Optional[int | float], points: list, curve: str) -> float:
     if curve == 'descending':
         if data <= points[1]:
             return 1.0
-        elif data > points[1] and data <= points[2]:
+        elif data > points[0] and data <= points[1]:
             return linier_function(data, points[0], 1, points[1], 0)
         else:
             return 0.0
@@ -30,7 +30,7 @@ def fuzzify(data: Optional[int | float], points: list, curve: str) -> float:
         else:
             return linier_function(data, points[1], 1, points[2], 0)
 
-def calculate_fuzzy_values(data: int | float, sickness_stages: Dict[str, float]) -> Dict[str, float]:
+def calculate_fuzzy_values(data, sickness_stages: Dict[str, float]) -> Dict[str, float]:
     output = dict()
     
     for key in sickness_stages.keys():
@@ -61,8 +61,8 @@ def blood_pressure_fuzzification(pressure: str) -> Dict[str, float]:
 
 def blood_sugar_fuzzification(sugar: str) -> Dict[str, float]:
     sickness_stages = dict()
-    sickness_stages['very_high'] = [[105, 120], 'ascending']
-    sickness_stages['low'] = [[105, 120], 'descending']
+    sickness_stages['true'] = [[105, 120], 'ascending']
+    sickness_stages['false'] = [[105, 120], 'descending']
     
     return calculate_fuzzy_values(int(sugar), sickness_stages)
 
@@ -110,7 +110,7 @@ def chest_pain_fuzzification(pain: str) -> Dict[str, int]:
     return output
 
 def exercise_fuzzification(exercise: str) -> Dict[str, int]:
-    sickness_kinds = ['avoid_exercise', 'do_exercise']
+    sickness_kinds = ['false', 'true']
     output = {k: 0 for k in sickness_kinds}
     output[sickness_kinds[int(exercise)-1]] = 1
     return output

@@ -27,7 +27,7 @@ def get_rule_value(rule: str, fuzzified_dict: Dict[str, dict]) -> Tuple[str, flo
         value = fuzzified_dict[class_1][condition_1]
         return (rule_params[5], value)
 
-def heart_disease_check(fuzzified_dict: Dict[str, dict]) -> Dict[str, float | int]:
+def heart_disease_check(fuzzified_dict: Dict[str, dict]) -> dict:
     output = {f'sick_{i}': 0.0 for i in range(1, 4+1)}
     output['healthy'] = 0.0
 
@@ -36,6 +36,6 @@ def heart_disease_check(fuzzified_dict: Dict[str, dict]) -> Dict[str, float | in
         if len(rule) <= 0:
             continue
         sickness, value = get_rule_value(rule, fuzzified_dict)
-        output[sickness] = max(output(sickness), value)
-        
+        output[sickness] = max(output[sickness], value)
+
     return output
