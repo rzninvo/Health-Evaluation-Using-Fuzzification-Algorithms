@@ -1,5 +1,6 @@
 from fuzzification import *
 from inference import heart_disease_check
+from defuzzification import get_centroid
 
 class ProvideResult(object):
     def __new__(cls):
@@ -10,4 +11,5 @@ class ProvideResult(object):
     @staticmethod
     def get_final_result(input_dict: dict) -> str:
         fuzzyfied_dict = get_fuzzyfied_set(input_dict)
-        return str(heart_disease_check(fuzzyfied_dict))
+        heart_disease_dict = heart_disease_check(fuzzyfied_dict)
+        return str(get_centroid(heart_disease_dict)) #str(heart_disease_check(fuzzyfied_dict))
