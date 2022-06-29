@@ -7,7 +7,7 @@ def linier_function(x: float, x1: float, y1: float, x2: float, y2: float) -> flo
     '''
     return y2 + ((y1 - y2)*(x - x2))/(x1 - x2)
 
-def fuzzify(data: Optional[int | float], points: list, curve: str) -> Optional[float | int]:
+def fuzzify(data: Optional[int | float], points: list, curve: str) -> float:
     if curve == 'ascending':
         if data <= points[0]:
             return 0.0
@@ -66,7 +66,7 @@ def blood_sugar_fuzzification(sugar: str) -> Dict[str, float]:
     
     return calculate_fuzzy_values(int(sugar), sickness_stages)
 
-def cholesterol_fuzzification(cholesterol: str) -> Dict[str, float]:
+def cholestrol_fuzzification(cholestrol: str) -> Dict[str, float]:
     sickness_stages = dict()
     
     sickness_stages['low'] = [[151, 197], 'descending']
@@ -74,7 +74,7 @@ def cholesterol_fuzzification(cholesterol: str) -> Dict[str, float]:
     sickness_stages['high'] = [[217, 263, 307], 'spiked']
     sickness_stages['very_high'] = [[281, 347], 'ascending']
     
-    return calculate_fuzzy_values(int(cholesterol), sickness_stages)
+    return calculate_fuzzy_values(int(cholestrol), sickness_stages)
 
 def heart_rate_fuzzification(rate: str) -> Dict[str, float]:
     sickness_stages = dict()
@@ -129,3 +129,15 @@ def sex_fuzzification(sex: str) -> Dict[str, int]:
     output = {k: 0 for k in sickness_kinds}
     output[sickness_kinds[int(sex)-1]] = 1
     return output
+
+def get_fuzzyfied_set(input_dict: dict):
+    output = dict()
+    for key in input_dict.keys():
+            output[key] = FUNCTIONS[key](input_dict[key])
+    return output
+
+
+FUNCTIONS = {'chest_pain': chest_pain_fuzzification, 'cholestrol': cholestrol_fuzzification, 
+                  'ecg': ecg_fuzzification, 'exercise': exercise_fuzzification, 'thallium_scan': thallium_fuzzification, 
+                  'age': age_fuzzification, 'blood_pressure': blood_pressure_fuzzification, 'blood_sugar': blood_sugar_fuzzification, 
+                  'heart_rate': heart_rate_fuzzification, 'old_peak': old_peak_fuzzification, 'sex': sex_fuzzification}
